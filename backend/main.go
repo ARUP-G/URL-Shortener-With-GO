@@ -39,7 +39,7 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "8181"
 	}
 
 	fmt.Printf("Server started at :%s\n", port)
