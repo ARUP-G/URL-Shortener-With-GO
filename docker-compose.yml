@@ -1,0 +1,37 @@
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: url-shortener-backend
+    ports:
+      - "8181:8181"
+    environment:
+      - PORT=8181
+      - MONGO_URI=mongodb://database:27017
+    depends_on:
+      - database
+
+  database:
+    build:
+      context: ./database
+      dockerfile: Dockerfile.database
+    container_name: url-shortener-database
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: url-shortener-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+volumes:
+  mongo-data:
+    driver: local
