@@ -12,7 +12,8 @@ spec:
     app: url-shortener
     tire: database
   ports:
-  - protocol: TCP
+  - name: mongo-service
+    protocol: TCP
     port: 27017
     targetPort: 27017
   
