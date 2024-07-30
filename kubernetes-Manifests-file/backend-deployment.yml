@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: prod
+  labels:
+    app: url-shortener
+    tire: backend 
+spec:
+  replicas: 1
+  selector:
+    matchLabeles:
+      app: url-shortener
+      tire: backend
+  template:
+    metadata:
+      labels: 
+        app: url-shortener
+        tire: backend
+    spec:
+      containers:
+      - name: backend
+        image: public.ecr.aws/y6q4k1r8/prod-backend:latest
+        ports:
+        - containerPort: 8181
+        env:
+          - name: MONGO_URL
+            value: "mongodb://mongo-service:27017/url-shortener"
