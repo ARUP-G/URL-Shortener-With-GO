@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: prod
+  labels:
+    app: url-shortener
+    tire: frontend 
+spec:
+  replicas: 2
+  selector:
+    matchLabeles:
+      app: url-shortener
+      tire: frontend
+  template:
+    metadata:
+      labels: 
+        app: url-shortener
+        tire: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: public.ecr.aws/y6q4k1r8/prod-frontend:latest
+        ports:
+        - containerPort: 80
+       
