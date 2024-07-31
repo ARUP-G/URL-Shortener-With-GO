@@ -9,7 +9,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabeles:
+    matchLabels:
       app: url-shortener
       tire: backend
   template:
@@ -21,8 +21,10 @@ spec:
       containers:
       - name: backend
         image: public.ecr.aws/y6q4k1r8/prod-backend:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8181
         env:
           - name: MONGO_URL
-            value: "mongodb://mongo-service:27017/url-shortener"
+            value: "mongodb://mongoadmin:password@mongo-service:27017/urlshortener?authSource=admin"
+        

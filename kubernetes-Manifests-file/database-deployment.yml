@@ -9,7 +9,7 @@ metadata:
 spec:
   replicas: 1
   selector:
-    matchLabeles:
+    matchLabels:
       app: url-shortener
       tire: database
   template:
@@ -21,12 +21,24 @@ spec:
       containers:
       - name: mongo
         image: mongo:latest
+        imagePullPolicy: Always
         ports:
           - containerPort: 27017
+        env: 
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: username
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: password
         volumeMounts:
           - name: mongo-storage
             mountPath: /data/db
-    volumeMounts:
+    volumes:
       - name: mongo-storage
         persistentVolumeClaim: 
           claimName: mongo-pvc 
