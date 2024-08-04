@@ -5,7 +5,7 @@ metadata:
   namespace: prod
   labels:
     app: url-shortener
-    tire: backend
+    tier: backend
 spec:
   type: ClusterIP
   selector:

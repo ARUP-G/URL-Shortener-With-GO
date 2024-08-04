@@ -5,7 +5,7 @@ metadata:
   namespace: prod
   labels:
     app: url-shortener
-    tire: database 
+    tier: database 
 spec:
   replicas: 1
   selector:
