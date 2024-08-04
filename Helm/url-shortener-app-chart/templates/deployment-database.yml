@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-deployment
+  namespace: prod
+  labels:
+    app: url-shortener
+    tier: database 
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: url-shortener
+      tire: database
+  template:
+    metadata:
+      labels: 
+        app: url-shortener
+        tire: database
+    spec:
+      containers:
+      - name: mongo
+        image: "{{.Values.mongoImage.repository}}:{{.Values.mongoImage.tag}}"
+        imagePullPolicy: {{ .Values.mongoImage.pullPolicy }}
+        ports:
+          - containerPort: {{.Values.service.databasePort}}
+        env: 
+          - name: MONGO_INITDB_ROOT_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: username
+          - name: MONGO_INITDB_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mongo-secret
+                key: password
+        volumeMounts:
+          - name: mongo-storage
+            mountPath: /data/db
+      volumes:
+        - name: mongo-storage
+          persistentVolumeClaim: 
+            claimName: mongo-pvc 
+       

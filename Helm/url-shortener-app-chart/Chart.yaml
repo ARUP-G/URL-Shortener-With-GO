@@ -1,0 +1,23 @@
+apiVersion: v2
+name: url-shortener-app
+description: A production-grade URL shortener application using a three-tier architecture with a frontend, backend, and MongoDB database.
+type: application
+version: 1.0.0
+appVersion: 1.0.0
+maintainers:
+  - name: Arup Das
+    email: arupdascontact@gmail.com
+    url: https://github.com/ARUP-G
+home: https://github.com/ARUP-G/url-shortener-app
+sources:
+  - https://github.com/ARUP-G/url-shortener-app
+keywords:
+  - url shortener
+  - golang
+  - mongodb
+  - kubernetes
+  - helm
+  - docker
+  - AWS
+  - EKS
+  - ECR 
