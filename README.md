@@ -1,13 +1,10 @@
-# URL-Shortener-With-GO
-This project is a three-tier URL shortener application, utilizing MongoDB for the database, Go for the backend, and HTML/CSS/JavaScript for the frontend. The entire application is dockerized and orchestrated using Docker Compose. The CI/CD pipeline is managed with Jenkins, and security analysis is conducted using Trivy. The application is built and pushed to AWS ECR (Elastic Container Registry) and deployed on an AWS EKS (Elastic Kubernetes Service) cluster.
-
 # URL Shortener With Go
 
-[![Go Version](https://img.shields.io/badge/Go-1.20-blue.svg)](https://golang.org/doc/go1.18)
+[![Go Version](https://img.shields.io/badge/Go-1.21-blue.svg)](https://golang.org/doc/go1.18)
 [![MongoDB](https://img.shields.io/badge/MongoDB-v5.0-green)](https://www.mongodb.com/try/download/community)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-A modern URL Shortener application built using Go, with a clean architecture and MongoDB integration. This project demonstrates the implementation of a three-tier architecture using Docker for containerization.
+A modern URL Shortener application built using Go, with a clean architecture and MongoDB integration. This project demonstrates the implementation of a three-tier architecture using Docker for containerization. The CI/CD pipeline is managed with Jenkins, and security analysis is conducted using Trivy. The application is built and pushed to AWS ECR (Elastic Container Registry) and deployed on an AWS EKS (Elastic Kubernetes Service) cluster.
 
 ## Table of Contents
 
@@ -74,7 +71,7 @@ The project follows a three-tier architecture:
 
 ## Tech Stack
 
-- **Go (Golang):** v1.18
+- **Go (Golang):** v1.21
 - **MongoDB:** v5.0
 - **Docker:** v20.10
 - **HTML/CSS/JavaScript:** Static files for frontend
@@ -83,7 +80,7 @@ The project follows a three-tier architecture:
 
 ### Prerequisites
 
-- [Go](https://golang.org/doc/install) (version 1.18 or higher)
+- [Go](https://golang.org/doc/install) (version 1.21 or higher)
 - [Docker](https://docs.docker.com/get-docker/)
 - [MongoDB](https://www.mongodb.com/try/download/community)
 
@@ -135,7 +132,7 @@ cd URL-Shortener-With-GO
 
 2. **Access the Application:**
 
-   Visit `http://localhost:8080` in your browser.
+   Visit `http://localhost:8181` in your browser.
 
 ## Usage
 
