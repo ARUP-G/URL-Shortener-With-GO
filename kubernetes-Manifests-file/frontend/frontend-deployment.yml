@@ -5,7 +5,7 @@ metadata:
   namespace: prod
   labels:
     app: url-shortener
-    tire: frontend 
+    tier: frontend 
 spec:
   replicas: 2
   selector:

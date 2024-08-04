@@ -4,7 +4,7 @@ metadata:
   name: mongo-pvc
   labels:
     app: url-shortener
-    tire: database
+    tier: database
 spec:
   accessModes:
     - ReadWriteOnce
