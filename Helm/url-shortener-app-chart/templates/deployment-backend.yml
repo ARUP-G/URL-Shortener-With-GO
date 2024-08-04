@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: prod
+  labels:
+    app: url-shortener
+    tire: backend 
+spec:
+  replicas: {{.Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: url-shortener
+      tire: backend
+  template:
+    metadata:
+      labels: 
+        app: url-shortener
+        tire: backend
+    spec:
+      containers:
+      - name: backend
+        image: {{ .Values.backendImage.repository }}:{{ .Values.backendImage.tag }}
+        imagePullPolicy: {{ .Values.backendImage.pullPolicy }}
+        ports:
+          - containerPort: {{ .Values.service.backendPort }}
+        env:
+          - name: MONGO_URL
+            value: "mongodb://mongoadmin:password@mongo-service:27017/urlshortener?authSource=admin"
+        

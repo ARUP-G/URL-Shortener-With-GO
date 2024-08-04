@@ -1,0 +1,27 @@
+
+replicaCount: 1
+
+backendImage:
+  repository: public.ecr.aws/y6q4k1r8/prod-backend
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+frontendImage:
+  repository: public.ecr.aws/y6q4k1r8/prod-frontend
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+mongoImage:
+  repository: mongo 
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  frontendPort: 80
+  backendPort: 8181
+  databasePort: 27017
+

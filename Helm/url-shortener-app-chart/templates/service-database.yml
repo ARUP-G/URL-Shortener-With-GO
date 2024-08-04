@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+  namespace: prod
+  labels:
+    app: url-shortener
+    tier: database
+spec:
+  type: {{.Values.service.type}}
+  selector:
+    app: url-shortener
+    tire: database
+  ports:
+  - name: mongo-service
+    protocol: TCP
+    port: {{.Values.service.databasePort}}
+    targetPort: {{.Values.service.databasePort}}
+  

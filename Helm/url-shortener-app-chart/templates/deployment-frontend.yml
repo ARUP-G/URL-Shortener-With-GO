@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: prod
+  labels:
+    app: url-shortener
+    tier: frontend 
+spec:
+  replicas: {{.Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: url-shortener
+      tire: frontend
+  template:
+    metadata:
+      labels: 
+        app: url-shortener
+        tire: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: {{.Values.frontendImage.repository}}:{{.Values.frontendImage.tag}}
+        ports:
+          - containerPort: {{.Values.service.frontendPort}}
+       
