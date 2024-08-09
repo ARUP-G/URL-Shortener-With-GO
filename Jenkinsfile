@@ -100,16 +100,15 @@ pipeline{
                 }
             }
         }
-        stage('Update Deployment File'){
-            steps{
-                dir('kubernetes-Manifests-file/forntend'){
-                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]){
-                        sh ```
-                            git config user.email ${GIT_USER_ACCOUNT}
-                            git config user.name ${GIT_USER_NAME}
-                            BUILD_NUMBER = ${BUILD_NUMBER}
-                            echo $BUILD_NUMBER
-                            echo $imageTag
+        stage('Update Deployment File') {
+            steps {
+                dir('kubernetes-Manifests-file/frontend') {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        script {
+                            sh """
+                            git config --global user.email "${GIT_USER_ACCOUNT}"
+                            git config --global user.name "${GIT_USER_NAME}"
+                            echo ${BUILD_NUMBER}
                             // Update backend image tag in values.yaml
                             sed -i 's|backendImage:.*|backendImage:|g' ${HELM_CHART_PATH}
                             sed -i 's|repository: .*|repository: ${BACKEND_REPOSITORY_URI}/${BACKEND_ECR_REPOSITORY_NAME}|g' ${HELM_CHART_PATH}
@@ -118,10 +117,11 @@ pipeline{
                             sed -i 's|frontendImage:.*|frontendImage:|g' ${HELM_CHART_PATH}
                             sed -i 's|repository: .*|repository: ${FRONTEND_REPOSITORY_URI}/${FRONTEND_ECR_REPOSITORY_NAME}|g' ${HELM_CHART_PATH}
                             sed -i 's|tag: .*|tag: "${BUILD_NUMBER}"|g' ${HELM_CHART_PATH}
-                            git add values.yml
-                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
-                        ```
+                            git add ${HELM_CHART_PATH}/values.yaml
+                            git commit -m "Update deployment Image to version ${BUILD_NUMBER}"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                            """
+                        }
                     }
                 }
             }
