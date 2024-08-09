@@ -130,7 +130,7 @@ pipeline{
             steps{
                 script{
                     sh 'aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name uel-shortener-cluster'
-                    helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --namespace ${K8S_NAMESPACE} --create-namespace
+                    sh 'helm upgrade --install ${HELM_RELEASE_NAME} ${HELM_CHART_PATH} --namespace ${K8S_NAMESPACE} --create-namespace'
                 }
             }
         }
