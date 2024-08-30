@@ -126,7 +126,7 @@ pipeline{
                 }
             }
         }
-        stage('Deploy eo EKS'){
+        stage('Deploy on EKS'){
             steps{
                 script{
                     sh 'aws eks update-kubeconfig --region ${AWS_DEFAULT_REGION} --name uel-shortener-cluster'
