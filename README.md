@@ -146,24 +146,7 @@ cd URL-Shortener-With-GO
 |--------|-----------------------|-----------------------------------|
 | POST   | `/api/v1/shorten`     | Shortens a provided URL           |
 | GET    | `/api/v1/{shortURL}`  | Redirects to the original URL     |
-| GET    | `/api/v1/analytics`   | Retrieves click statistics        |
 
-## Testing
-
-### Run Unit Tests
-
-```bash
-cd backend
-go test ./...
-```
-
-### Run Integration Tests
-
-Ensure that Docker and MongoDB are running, then execute:
-
-```bash
-docker-compose -f docker-compose.test.yml up --build
-```
 
 ### Continuous Integration
 
@@ -188,7 +171,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any inquiries or feedback, feel free to reach out:
 
 - **GitHub:** [ARUP-G](https://github.com/ARUP-G)
-- **Email:** [your-email@example.com](mailto:your-email@example.com)
+- **Email:** [your-email@example.com](mailto:arupdascontact@gmail.com)
 
 ---
 
