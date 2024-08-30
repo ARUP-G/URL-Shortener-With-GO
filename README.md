@@ -171,7 +171,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any inquiries or feedback, feel free to reach out:
 
 - **GitHub:** [ARUP-G](https://github.com/ARUP-G)
-- **Email:** [your-email@example.com](mailto:arupdascontact@gmail.com)
+- **Email:** [arupdascontact@gmail.com](mailto:arupdascontact@gmail.com)
 
 ---
 
