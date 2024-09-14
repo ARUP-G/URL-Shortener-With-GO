@@ -1,7 +1,7 @@
 pipeline{
     agent any
 
-    environment{
+    environment {
 
         // AWS
         AWS_ACCOUNT_ID        = 'aws-id'
@@ -19,6 +19,10 @@ pipeline{
         GIT_USER_ACCOUNT    = 'git_user_account'
         GIT_USER_NAME       = 'git_user_name'
         GIT_REPO_NAME       = 'git_repo_name'
+        
+        // SonarQube Configuration
+        SONARQUBE_URL       = 'http://your-sonarqube-url'
+        SONARQUBE_TOKEN     = 'sonarqube-token'
 
         // Helm Configuration
         HELM_RELEASE_NAME   = 'helm_relese_name'  
@@ -41,24 +45,33 @@ pipeline{
                 } 
             }
         }
+
         stage('Trivy Scan'){
             steps{
                 sh 'trivy fs --format table -o fs-report.html .'
             }
         }
-        stage('SonarQube'){
-            steps{
-                sh " $SCANNER_HOME/bin/sonar-scanner Dsonar.projectKey=URL-shortener Dsonar.ProjectName=URL-shortener"
+
+        stage('SonarQube Scan') {
+            steps {
+                withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
+                    sh """
+                    $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectKey=URL-shortener \
+                        -Dsonar.projectName=URL-shortener \
+                        -Dsonar.host.url=${SONARQUBE_URL} \
+                        -Dsonar.login=${SONARQUBE_TOKEN}
+                    """
+                }
             }
         }
+
         stage('Build & tag Docker image for backend'){
             steps{
                 script{
-                    withDockerRegistry(creadentialsId: 'docker-cred', toolName:'docker')
                     sh 'docker system prune -f'
                     sh 'docker container prune -f'
-                    sh './backend/Dockerfile'
-                    sh 'docker build -t ${REPOSITORY_URI}${BACKEND_ECR_REPOSITORY_NAME}::$(BUILD_NUMBER) .'
+                    sh 'docker build -t ${REPOSITORY_URI}${BACKEND_ECR_REPOSITORY_NAME}::$(BUILD_NUMBER) -f ./backend/Dockerfile .'
 
                 }
             }
@@ -71,18 +84,18 @@ pipeline{
         stage('Push to BACKEND_ECR'){
             steps{
                 script{
-                    withDockerRegistry(creadentialsId: 'docker-cred', toolName:'docker')
+                    // Login to AWS ECR
                     sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${BACKEND_REPOSITORY_URI}'
-                    sh 'docker push ${BACKEND_REPOSITORY_URI}${BACKEND_ECR_REPOSITORY_NAME}:${BUILD_NUMBER}'
+
+                    // Push Docker image
+                    sh 'docker push ${BACKEND_REPOSITORY_URI}:${BUILD_NUMBER}'
                 }
             }
         }
         stage('Build & tag Docker image for forntend'){
             steps{
                 script{
-                    withDockerRegistry(creadentialsId: 'docker-cred', toolName:'docker')
-                    sh './frontend/Dockerfile'
-                    sh 'docker build -t ${REPOSITORY_URI}${FRONTEND_ECR_REPOSITORY_NAME}::$(BUILD_NUMBER) .'
+                    sh 'docker build -t ${REPOSITORY_URI}${FRONTEND_ECR_REPOSITORY_NAME}::$(BUILD_NUMBER) -f ./frontend/Dockerfile'
                 }
             }
         }
@@ -94,38 +107,54 @@ pipeline{
         stage('Push to FRONTEND_ECR'){
             steps{
                 script{
-                    withDockerRegistry(creadentialsId: 'docker-cred', toolName:'docker')
                     sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${FRONTEND_REPOSITORY_URI}'
                     sh 'docker push ${FRONTEND_REPOSITORY_URI}${FRONTEND_ECR_REPOSITORY_NAME}:${BUILD_NUMBER}'
                 }
             }
         }
         stage('Update Deployment File') {
-            steps {
-                dir('kubernetes-Manifests-file/frontend') {
-                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                        script {
-                            sh """
-                            git config --global user.email "${GIT_USER_ACCOUNT}"
-                            git config --global user.name "${GIT_USER_NAME}"
-                            echo ${BUILD_NUMBER}
-                            // Update backend image tag in values.yaml
-                            sed -i 's|backendImage:.*|backendImage:|g' ${HELM_CHART_PATH}
-                            sed -i 's|repository: .*|repository: ${BACKEND_REPOSITORY_URI}/${BACKEND_ECR_REPOSITORY_NAME}|g' ${HELM_CHART_PATH}
-                            sed -i 's|tag: .*|tag: "${BUILD_NUMBER}"|g' ${HELM_CHART_PATH}
-                            // Update frontend image tag in values.yaml
-                            sed -i 's|frontendImage:.*|frontendImage:|g' ${HELM_CHART_PATH}
-                            sed -i 's|repository: .*|repository: ${FRONTEND_REPOSITORY_URI}/${FRONTEND_ECR_REPOSITORY_NAME}|g' ${HELM_CHART_PATH}
-                            sed -i 's|tag: .*|tag: "${BUILD_NUMBER}"|g' ${HELM_CHART_PATH}
-                            git add ${HELM_CHART_PATH}/values.yaml
-                            git commit -m "Update deployment Image to version ${BUILD_NUMBER}"
-                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                            """
+        steps {
+            dir('kubernetes-Manifests-file/frontend') {
+                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    script {
+                        // Configure Git user
+                        sh 'git config --global user.email "${GIT_USER_ACCOUNT}"'
+                        sh 'git config --global user.name "${GIT_USER_NAME}"'
+
+                        // Update backend image repository and tag in Helm values.yaml
+                        sh """
+                        sed -i 's|repository:.*public.ecr.aws/y6q4k1r8/prod-backend|repository: ${BACKEND_REPOSITORY_URI}|g' ${HELM_CHART_PATH}/values.yaml
+                        sed -i 's|tag:.*|tag: "${BUILD_NUMBER}"|g' ${HELM_CHART_PATH}/values.yaml
+                        """
+
+                        // Update frontend image repository and tag in Helm values.yaml
+                        sh """
+                        sed -i 's|repository:.*public.ecr.aws/y6q4k1r8/prod-frontend|repository: ${FRONTEND_REPOSITORY_URI}|g' ${HELM_CHART_PATH}/values.yaml
+                        sed -i 's|tag:.*|tag: "${BUILD_NUMBER}"|g' ${HELM_CHART_PATH}/values.yaml
+                        """
+
+                        // Optionally update mongo image tag if needed
+                        //  Uncomment and modify if you want to update mongo image details as well
+                        //  sh """
+                        //  sed -i 's|repository: mongo|repository: ${MONGO_REPOSITORY_URI}|g' ${HELM_CHART_PATH}/values.yaml
+                        //  sed -i 's|tag:.*|tag: "${BUILD_NUMBER}"|g' ${HELM_CHART_PATH}/values.yaml
+                        //  """
+
+                        // Check if there are changes to commit
+                        def changes = sh(script: 'git status --porcelain', returnStdout: true).trim()
+                        if (changes) {
+                            sh 'git add ${HELM_CHART_PATH}/values.yaml'
+                            sh 'git commit -m "Update deployment images to version ${BUILD_NUMBER}"'
+                            sh 'git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main'
+                        } else {
+                            echo 'No changes to commit.'
+                        }
                         }
                     }
                 }
             }
         }
+
         stage('Deploy on EKS'){
             steps{
                 script{
