@@ -3,7 +3,7 @@ FROM nginx:alpine
 
 COPY .frontend/images/home.mp4 /usr/share/nginx/html/images/home.mp4 
 # Replace the default index.html with your own
-COPY .fr0ntend/index.html /usr/share/nginx/html/index.html
+COPY .frontend/index.html /usr/share/nginx/html/index.html
 
 # Expose port 80 to the outside world
 EXPOSE 80
