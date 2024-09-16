@@ -16,7 +16,7 @@ services:
   database:
     build:
       context: ./database
-      dockerfile: Dockerfile.database
+      dockerfile: Dockerfile
     container_name: url-shortener-database
     ports:
       - "27017:27017"
