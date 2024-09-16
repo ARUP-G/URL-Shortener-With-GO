@@ -2,7 +2,7 @@
 FROM nginx:alpine
 
 # Replace the default index.html with your own
-COPY index.html /usr/share/nginx/html/index.html
+COPY ./frontend/index.html /usr/share/nginx/html/index.html
 
 # Expose port 80 to the outside world
 EXPOSE 80
