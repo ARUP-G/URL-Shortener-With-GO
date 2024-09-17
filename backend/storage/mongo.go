@@ -4,7 +4,8 @@ import (
 	"context"
 	"math/rand"
 	"time"
-	"url-shortner/model"
+
+	"github.com/ARUP-G/URL-Shortener-With-GO/model"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
