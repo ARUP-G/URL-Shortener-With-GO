@@ -1,6 +1,7 @@
 # Use the official Nginx image from the Docker Hub
-FROM nginx:alpine
+FROM nginx:alpine 
 
+COPY images/home.mp4 /usr/share/nginx/html/images/home.mp4 
 # Replace the default index.html with your own
 COPY index.html /usr/share/nginx/html/index.html
 

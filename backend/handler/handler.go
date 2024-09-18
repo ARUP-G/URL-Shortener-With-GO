@@ -3,8 +3,11 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
-	"url-shortner/storage"
+	"net/url"
+
+	"github.com/ARUP-G/URL-Shortener-With-GO/storage"
 )
 
 type ShortenRequest struct {
@@ -19,7 +22,15 @@ func ShortenURL(store storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req ShortenRequest
 		if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
+			log.Printf("Error decoding request: %v", err)
+			http.Error(w, "Invalid request payload"+err.Error(), http.StatusBadRequest)
+			return
+		}
+
+		// Validate the URL
+		_, err := url.ParseRequestURI(req.URL)
+		if err != nil {
+			http.Error(w, "Invalid URL format", http.StatusBadRequest)
 			return
 		}
 
