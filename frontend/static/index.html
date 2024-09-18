@@ -130,7 +130,7 @@
             copiedMessage.style.display = 'none';
             loadingDiv.style.display = 'block';
 
-            const API_URL = 'http://54.89.42.243:8181'
+            const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://54.89.42.243:8181'
 
             try {
                 const response = await fetch('${API_URL}/shorten', {
