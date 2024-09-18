@@ -130,8 +130,10 @@
             copiedMessage.style.display = 'none';
             loadingDiv.style.display = 'block';
 
+            const API_URL = 'https://url-shortener-with-go.vercel.app'
+
             try {
-                const response = await fetch('/shorten', {
+                const response = await fetch('${API_URL}/shorten', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
