@@ -36,6 +36,7 @@ func ShortenURL(store storage.Storage) http.HandlerFunc {
 
 		shortURL, err := store.SaveURL(context.Background(), req.URL)
 		if err != nil {
+			log.Printf("Error saving YRL: %v", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -49,12 +50,18 @@ func ShortenURL(store storage.Storage) http.HandlerFunc {
 func Redirect(store storage.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		shortURL := r.URL.Path[1:]
+		log.Printf("Received request for short URL: %s", shortURL)
+
 		longURL, err := store.GetURL(context.Background(), shortURL)
 		if err != nil {
+			log.Printf("Error retrieving long URL for %s: %v", shortURL, err)
 			http.NotFound(w, r)
 			return
 		}
 
+		log.Printf("Retrieved long URL: %s", longURL)
+
+		log.Printf("Redirecting to: %s", longURL)
 		http.Redirect(w, r, longURL, http.StatusFound)
 	}
 }

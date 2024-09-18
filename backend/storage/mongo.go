@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"log"
 	"math/rand"
 	"time"
 
@@ -49,10 +50,15 @@ func (s *MongoStorage) SaveURL(ctx context.Context, longURL string) (string, err
 }
 
 func (s *MongoStorage) GetURL(ctx context.Context, shortURL string) (string, error) {
+	log.Printf("Attempting to retrieve long URL for short URL: %s", shortURL)
+
 	var url model.URL
 	err := s.db.Collection("urls").FindOne(ctx, bson.M{"short_url": shortURL}).Decode(&url)
 	if err != nil {
+		log.Printf("Error retrieving URL from database: %v", err)
 		return "", err
 	}
+
+	log.Printf("Retrieved long URL from database: %s", url.LongURL)
 	return url.LongURL, nil
 }
