@@ -22,6 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	log.Printf("Connected to database")
 
 	db := client.Database("urlshortener")
 	urlStore := storage.NewMongoStorage(db)

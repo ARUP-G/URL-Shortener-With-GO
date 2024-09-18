@@ -131,7 +131,7 @@
             loadingDiv.style.display = 'block';
 
             try {
-                const response = await fetch('http://localhost:8181/shorten', {
+                const response = await fetch('/shorten', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
