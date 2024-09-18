@@ -42,7 +42,7 @@ func main() {
 	})
 	// Setup CORS
 	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"https://url-shortener-with-go.vercel.app"}), // Allow all origins
+		handlers.AllowedOrigins([]string{"https://url-shortener-with-go-git-vercel-deploy-ards-projects-60ea9f9d.vercel.app"}), // Allow all origins
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
 	)(http.DefaultServeMux)
