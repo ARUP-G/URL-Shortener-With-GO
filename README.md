@@ -6,6 +6,8 @@
 
 A modern URL Shortener application built using Go, with a clean architecture and MongoDB integration. This project demonstrates the implementation of a three-tier architecture using Docker for containerization. The CI/CD pipeline is managed with Jenkins, and security analysis is conducted using Trivy. The application is built and pushed to AWS ECR (Elastic Container Registry) and deployed on an AWS EKS (Elastic Kubernetes Service) cluster.
 
+Checkout URL_Shortener (https://url-shortener-with-go-l2go.vercel.app/)
+
 ![App-face](./images/home-page.png)
 
 ## Table of Contents
