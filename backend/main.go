@@ -17,7 +17,8 @@ import (
 )
 
 func main() {
-	clientOptions := options.Client().ApplyURI("mongodb://database:27017")
+	MONGO_URI := os.Getenv("MONGO_URI")
+	clientOptions := options.Client().ApplyURI(MONGO_URI)
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		log.Fatal(err)
@@ -42,7 +43,7 @@ func main() {
 	})
 	// Setup CORS
 	corsHandler := handlers.CORS(
-		handlers.AllowedOrigins([]string{"https://url-shortener-with-go.vercel.app"}),
+		handlers.AllowedOrigins([]string{"https://url-shortener-with-go-l2go.vercel.app"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
 		handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
 	)(http.DefaultServeMux)
