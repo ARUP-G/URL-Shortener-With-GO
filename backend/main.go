@@ -22,7 +22,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
-	// Get MongoDB URI from environment variable
+	// Get MongoDB URI from environment variable 
 	MONGO_URI := os.Getenv("MONGO_URI")
 	if MONGO_URI == "" {
 		log.Fatal("MONGO_URI not set in environment")
