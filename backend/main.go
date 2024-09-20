@@ -41,7 +41,7 @@ func main() {
 			handler.Redirect(urlStore)(w, r)
 		}
 	})
-	// Setup CORS
+	// Setup CORS for frontend url
 	corsHandler := handlers.CORS(
 		handlers.AllowedOrigins([]string{"https://url-shortener-with-go-l2go.vercel.app"}),
 		handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}),
