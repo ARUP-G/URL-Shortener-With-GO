@@ -34,7 +34,7 @@ func main() {
 	if err != nil {
 		log.Fatal("Failed to connect to MongoDB:", err)
 	}
-	log.Printf("Connected to database.")
+	log.Printf("Connected to database.!")
 
 	db := client.Database("urlshortener")
 	urlStore := storage.NewMongoStorage(db)
