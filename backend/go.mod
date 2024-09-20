@@ -4,6 +4,7 @@ go 1.23.1
 
 require (
 	github.com/gorilla/handlers v1.5.2
+	github.com/joho/godotenv v1.5.1
 	go.mongodb.org/mongo-driver v1.16.1
 )
 
