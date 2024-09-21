@@ -1,0 +1,22 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/index.go",
+        "use": "@vercel/go"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/static/(.*)",
+        "dest": "/static/$1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/api"
+      }
+    ],
+    "env": {
+      "MONGO_URI": "mongodb+srv://ard:Mgo66@app-data-1.1chgr.mongodb.net/?retryWrites=true&w=majority&appName=App-data-1"
+    }
+  }
