@@ -18,18 +18,18 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	// Get MongoDB URI from environment variable 
-	MONGO_URI := os.Getenv("MONGO_URI")
-	if MONGO_URI == "" {
-		log.Fatal("MONGO_URI not set in environment")
-	}
+	// err := godotenv.Load()
+	// if err != nil {
+	// 	log.Fatalf("Error loading .env file")
+	// }
+	// // Get MongoDB URI from environment variable 
+	// MONGO_URI := os.Getenv("MONGO_URI")
+	// if MONGO_URI == "" {
+	// 	log.Fatal("MONGO_URI not set in environment")
+	// }
 
 	// Connect to MongoDB
-	clientOptions := options.Client().ApplyURI(MONGO_URI)
+	clientOptions := options.Client().ApplyURI('mongodb+srv://ard:Mgo66@app-data-1.1chgr.mongodb.net/?retryWrites=true&w=majority&appName=App-data-1')
 	client, err := mongo.Connect(context.Background(), clientOptions)
 	if err != nil {
 		log.Fatal("Failed to connect to MongoDB:", err)
