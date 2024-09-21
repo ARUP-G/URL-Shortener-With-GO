@@ -1,0 +1,11 @@
+{
+  "functions": {
+    "api/*.go": {
+      "runtime": "go@latest"
+    }
+  },
+  "routes": [
+    { "src": "/shorten", "dest": "/api/shorten" },
+    { "src": "/.*", "dest": "/api/redirect" }
+  ]
+}
