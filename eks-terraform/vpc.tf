@@ -3,9 +3,12 @@ provider "aws" {
 }
 
 # Retrive the list of azs in the region, used in vpc creation
-data "aws_availability_zone" "available" {
-  
-}
+data "aws_availability_zones" "available" {}
+  # filter {
+  #   name   = "zone-name"
+  #   values = ["us-west-1a", "us-west-1b"] 
+  # }
+
 
 locals {
   cluster_name = "ard-eks-${random_string.suffix.result}"
@@ -22,9 +25,9 @@ module "vpc" {
 
   name = "ard-eks-vpc"
   cidr = var.vpc_cidr
-  azs = data.aws_availability_zone.available
+  azs = data.aws_availability_zones.available.names
   private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets = ["10.0.4.0/24, 10.0.5.0/24"]
+  public_subnets = ["10.0.4.0/24" , "10.0.5.0/24"]
 
   # Enables a NAT Gateway for the VPC, 
   # allowing private subnets to access the internet.  
